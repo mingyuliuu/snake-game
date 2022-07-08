@@ -1,3 +1,5 @@
+import Snake from "./snake.js"
+
 const canvas = document.getElementById("game");
 const context = canvas.getContext("2d");
 
@@ -7,6 +9,8 @@ let tileCount = 20;
 let tileSize = canvas.width / tileCount - 2;
 let headX = 10;
 let headY = 10;
+const snakeParts = [];
+let tailLength = 2;
 
 let appleX = 5;
 let appleY = 5;
@@ -33,6 +37,27 @@ function clearScreen() {
 function drawSnake() {
   context.fillStyle = "rgba(245, 40, 145, 0.8)";
   context.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
+
+  context.fillStyle = "rgba(137, 183, 45, 0.5)";
+  for (let i = 0; i < snakeParts.length; i++) {
+    let part = snakeParts[i];
+    context.fillRect(
+      part.x * tileCount,
+      part.y * tileCount,
+      tileSize,
+      tileSize
+    );
+  }
+
+  // Put an item at the end
+  snakeParts.push(new Snake(headX, headY));
+  if (snakeParts.length > tailLength) {
+    // Remove the furtherest item
+    snakeParts.shift();
+  }
+
+  context.fillStyle = "rgba(245, 40, 145, 0.8)";
+  context.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
 }
 
 function changeSnakePosition() {
@@ -41,15 +66,17 @@ function changeSnakePosition() {
 }
 
 function drawApple() {
-    context.fillStyle = "red";
-    context.fillRect(appleX * tileCount, appleY * tileCount, tileSize, tileSize);
+  context.fillStyle = "red";
+  context.fillRect(appleX * tileCount, appleY * tileCount, tileSize, tileSize);
 }
 
 function checkAppleCollision() {
-    if (appleX === headX && appleY === headY) {
-        appleX = Math.floor(Math.random() * tileCount);
-        appleY = Math.floor(Math.random() * tileCount);
-    }
+  if (appleX === headX && appleY === headY) {
+    appleX = Math.floor(Math.random() * tileCount);
+    appleY = Math.floor(Math.random() * tileCount);
+
+    tailLength++;
+  }
 }
 document.body.addEventListener("keydown", keyDown);
 
