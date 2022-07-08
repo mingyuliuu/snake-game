@@ -8,6 +8,9 @@ let tileSize = canvas.width / tileCount - 2;
 let headX = 10;
 let headY = 10;
 
+let appleX = 5;
+let appleY = 5;
+
 let xVelocity = 0;
 let yVelocity = 0;
 
@@ -15,6 +18,9 @@ let yVelocity = 0;
 function drawGame() {
   clearScreen();
   changeSnakePosition();
+
+  checkAppleCollision();
+  drawApple();
   drawSnake();
   setTimeout(drawGame, 1000 / speed);
 }
@@ -34,6 +40,17 @@ function changeSnakePosition() {
   headY += yVelocity;
 }
 
+function drawApple() {
+    context.fillStyle = "red";
+    context.fillRect(appleX * tileCount, appleY * tileCount, tileSize, tileSize);
+}
+
+function checkAppleCollision() {
+    if (appleX === headX && appleY === headY) {
+        appleX = Math.floor(Math.random() * tileCount);
+        appleY = Math.floor(Math.random() * tileCount);
+    }
+}
 document.body.addEventListener("keydown", keyDown);
 
 function keyDown(event) {
