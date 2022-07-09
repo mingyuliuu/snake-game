@@ -73,7 +73,7 @@ function drawScore() {
   context.font = "12px Verdana";
   context.fillText("Score " + score, canvas.width - 55, 15);
 
-  speed = score > 5 ? (score > 10 ? (score > 20 ? 10 : 9) : 8) : 7;
+  speed = score > 5 ? (score > 10 ? (score > 20 ? 12 : 10) : 8) : 7;
 }
 
 function clearScreen() {
