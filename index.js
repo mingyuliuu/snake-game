@@ -18,15 +18,33 @@ let appleY = 5;
 
 let xVelocity = 0;
 let yVelocity = 0;
+let inputXVelocity = 0;
+let inputYVelocity = 0;
+let prevXVelocity = 0;
+let prevYVelocity = 0;
 
 const sound = new Audio("sound.wav");
 const gameOverSound = new Audio("gameOver.wav");
 
 // Game Loop
 function drawGame() {
+  if (prevXVelocity === 1 && xVelocity === -1 || prevXVelocity === -1 && xVelocity === 1) {
+    xVelocity = prevXVelocity;
+  }
+
+  if (prevYVelocity === 1 && yVelocity === -1 || prevYVelocity === -1 && yVelocity === 1) {
+    yVelocity = prevYVelocity;
+  }
+
+  prevXVelocity = xVelocity;
+  prevYVelocity = yVelocity;
+
   changeSnakePosition();
 
-  if (isGameOver()) return;
+  if (isGameOver()) {
+    document.body.removeEventListener("keydown", keyDown);
+    return;
+  }
 
   clearScreen();
 
@@ -40,7 +58,7 @@ function drawGame() {
 
 function isGameOver() {
   if (yVelocity === 0 && xVelocity === 0) return false;
-  
+
   let isGameOver = false;
 
   // Walls
@@ -133,26 +151,18 @@ document.body.addEventListener("keydown", keyDown);
 function keyDown(event) {
   if (event.keyCode == 38) {
     // Up
-    if (yVelocity == 1) return;
-
     yVelocity = -1;
     xVelocity = 0;
   } else if (event.keyCode == 40) {
     // Down
-    if (yVelocity == -1) return;
-
     yVelocity = 1;
     xVelocity = 0;
   } else if (event.keyCode == 37) {
     // Left
-    if (xVelocity == 1) return;
-
     yVelocity = 0;
     xVelocity = -1;
   } else if (event.keyCode == 39) {
     // Right
-    if (xVelocity == -1) return;
-
     yVelocity = 0;
     xVelocity = 1;
   }
