@@ -3,11 +3,13 @@ import Snake from "./snake.js";
 const canvas = document.getElementById("game");
 const context = canvas.getContext("2d");
 
+const restartButton = document.getElementById("restart");
+
 let speed = 7;
 let score = 0;
 
-let tileCount = 20;
-let tileSize = canvas.width / tileCount - 2;
+const tileCount = 20;
+const tileSize = canvas.width / tileCount - 2;
 let headX = 10;
 let headY = 10;
 const snakeParts = [];
@@ -18,8 +20,6 @@ let appleY = 5;
 
 let xVelocity = 0;
 let yVelocity = 0;
-let inputXVelocity = 0;
-let inputYVelocity = 0;
 let prevXVelocity = 0;
 let prevYVelocity = 0;
 
@@ -28,11 +28,17 @@ const gameOverSound = new Audio("gameOver.wav");
 
 // Game Loop
 function drawGame() {
-  if (prevXVelocity === 1 && xVelocity === -1 || prevXVelocity === -1 && xVelocity === 1) {
+  if (
+    (prevXVelocity === 1 && xVelocity === -1) ||
+    (prevXVelocity === -1 && xVelocity === 1)
+  ) {
     xVelocity = prevXVelocity;
   }
 
-  if (prevYVelocity === 1 && yVelocity === -1 || prevYVelocity === -1 && yVelocity === 1) {
+  if (
+    (prevYVelocity === 1 && yVelocity === -1) ||
+    (prevYVelocity === -1 && yVelocity === 1)
+  ) {
     yVelocity = prevYVelocity;
   }
 
@@ -54,6 +60,10 @@ function drawGame() {
   drawScore();
 
   setTimeout(drawGame, 1000 / speed);
+
+  restartButton.onclick = function () {
+    restartGame();
+  };
 }
 
 function isGameOver() {
@@ -100,10 +110,10 @@ function clearScreen() {
 }
 
 function drawSnake() {
-  context.fillStyle = "rgba(245, 40, 145, 0.8)";
+  context.fillStyle = "rgba(45, 242, 238, 0.5)";
   context.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
 
-  context.fillStyle = "rgba(137, 183, 45, 0.5)";
+  context.fillStyle = "rgba(225, 137, 227, 0.5)";
   for (let i = 0; i < snakeParts.length; i++) {
     let part = snakeParts[i];
     context.fillRect(
@@ -121,7 +131,7 @@ function drawSnake() {
     snakeParts.shift();
   }
 
-  context.fillStyle = "rgba(245, 40, 145, 0.8)";
+  context.fillStyle = "rgba(45, 242, 238, 0.5)";
   context.fillRect(headX * tileCount, headY * tileCount, tileSize, tileSize);
 }
 
@@ -146,6 +156,7 @@ function checkAppleCollision() {
     sound.play();
   }
 }
+
 document.body.addEventListener("keydown", keyDown);
 
 function keyDown(event) {
@@ -169,3 +180,24 @@ function keyDown(event) {
 }
 
 drawGame();
+
+function restartGame() {
+  speed = 7;
+  score = 0;
+
+  headX = 10;
+  headY = 10;
+  snakeParts.length = 0;
+  tailLength = 2;
+
+  appleX = 5;
+  appleY = 5;
+
+  xVelocity = 0;
+  yVelocity = 0;
+  prevXVelocity = 0;
+  prevYVelocity = 0;
+
+  document.body.addEventListener("keydown", keyDown);
+  drawGame();
+}
