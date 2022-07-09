@@ -1,4 +1,4 @@
-import Snake from "./snake.js"
+import Snake from "./snake.js";
 
 const canvas = document.getElementById("game");
 const context = canvas.getContext("2d");
@@ -18,15 +18,59 @@ let appleY = 5;
 let xVelocity = 0;
 let yVelocity = 0;
 
+let score = 0;
+
 // Game Loop
 function drawGame() {
-  clearScreen();
   changeSnakePosition();
+
+  if (isGameOver()) return;
+
+  clearScreen();
 
   checkAppleCollision();
   drawApple();
   drawSnake();
+  drawScore();
+
   setTimeout(drawGame, 1000 / speed);
+}
+
+function isGameOver() {
+  if (yVelocity === 0 && xVelocity === 0) return false;
+  
+  let isGameOver = false;
+
+  // Walls
+  if (headX < 0 || headX === tileCount || headY < 0 || headY === tileCount) {
+    isGameOver = true;
+  }
+
+  for (let i = 0; i < snakeParts.length; i++) {
+    let part = snakeParts[i];
+
+    // Snake
+    if (part.x === headX && part.y === headY) {
+      isGameOver = true;
+      break;
+    }
+  }
+
+  if (!isGameOver) return false;
+
+  context.fillStyle = "white";
+  context.font = "50px Verdana";
+  context.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
+
+  return true;
+}
+
+function drawScore() {
+  context.fillStyle = "white";
+  context.font = "12px Verdana";
+  context.fillText("Score " + score, canvas.width - 55, 15);
+
+  speed = score > 5 ? (score > 10 ? (score > 20 ? 10 : 9) : 8) : 7;
 }
 
 function clearScreen() {
@@ -76,6 +120,7 @@ function checkAppleCollision() {
     appleY = Math.floor(Math.random() * tileCount);
 
     tailLength++;
+    score++;
   }
 }
 document.body.addEventListener("keydown", keyDown);
