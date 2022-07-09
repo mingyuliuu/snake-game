@@ -4,6 +4,7 @@ const canvas = document.getElementById("game");
 const context = canvas.getContext("2d");
 
 let speed = 7;
+let score = 0;
 
 let tileCount = 20;
 let tileSize = canvas.width / tileCount - 2;
@@ -18,7 +19,8 @@ let appleY = 5;
 let xVelocity = 0;
 let yVelocity = 0;
 
-let score = 0;
+const sound = new Audio("sound.wav");
+const gameOverSound = new Audio("gameOver.wav");
 
 // Game Loop
 function drawGame() {
@@ -61,6 +63,7 @@ function isGameOver() {
   context.fillStyle = "white";
   context.font = "50px Verdana";
   context.fillText("Game Over!", canvas.width / 6.5, canvas.height / 2);
+  gameOverSound.play();
 
   return true;
 }
@@ -121,6 +124,8 @@ function checkAppleCollision() {
 
     tailLength++;
     score++;
+
+    sound.play();
   }
 }
 document.body.addEventListener("keydown", keyDown);
