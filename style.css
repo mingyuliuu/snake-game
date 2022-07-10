@@ -23,6 +23,7 @@ button {
     font-weight: 400;
     font-size: large;
     color: #000000;
+    background-color: white;
     text-align: center;
     transition: all 0.2s;
 }
